@@ -1,0 +1,32 @@
+<div><h1>Store</h1></div>
+<div *ngIf="userstatus">
+  <a href="https://localhost:44316/basket">Basket</a>
+</div>
+<br />
+<br />
+
+<div *ngFor="let phone of phones">
+  <h3>
+    <a routerLink="/description/{{phone.id}}" [title]="'Description'">
+      {{phone.name}}
+    </a>
+  </h3>
+
+  <div *ngIf="phone.isAdded; else alt">
+    <button (click)="remove(phone.id)">Remove</button>
+  </div>
+
+  <ng-template #alt>
+    <div>
+      <button (click)="add(phone.id)">Add</button>
+    </div>
+  </ng-template>
+
+</div>
+<br />
+<br />
+<br />
+<div *ngIf="userstatus">
+  <button (click)="logout()">Логаут</button>
+</div>
+
