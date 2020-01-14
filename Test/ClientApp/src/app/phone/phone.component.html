@@ -1,11 +1,8 @@
 <div><h1>Store</h1></div>
-<div *ngIf="userstatus">
-  <a href="https://localhost:44316/basket">Basket</a>
-</div>
-<br />
 <br />
 
 <div *ngFor="let phone of phones">
+
   <h3>
     <a routerLink="/description/{{phone.id}}" [title]="'Description'">
       {{phone.name}}
@@ -23,10 +20,20 @@
   </ng-template>
 
 </div>
+
 <br />
 <br />
 <br />
-<div *ngIf="userstatus">
+
+<div *ngIf="userstatus; else alt">
+  <a href="https://localhost:44316/basket">Basket</a>
   <button (click)="logout()">Логаут</button>
 </div>
 
+<ng-template #alt>
+  <div>
+    <a href="https://localhost:44316/user">Sign In</a>
+</div>
+</ng-template>
+
+<button (click)="getstatus()">STATUS</button>

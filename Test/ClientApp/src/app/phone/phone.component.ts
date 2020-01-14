@@ -1,32 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { PhoneService } from '../phone.service';
+import { UserAuthorizationStatusService } from '../user-authorization-status.service';
+import { LoggerService } from '../logger.service';
 
 @Component({
     selector: 'app-phone',
     templateUrl: './phone.component.html',
-    styleUrls: ['./phone.component.css']
+    styleUrls: ['./phone.component.css'],
+    providers: [PhoneService]
 })
-export class PhoneComponent implements OnInit {
+export class PhoneComponent implements OnInit{
     userstatus;
     phones;
-    constructor(private http: HttpClient) { }
+    constructor(private phoneservice: PhoneService, private userstatusservice: UserAuthorizationStatusService, private logger: LoggerService) { }
     ngOnInit() {
-        this.http.get('https://localhost:44316/authorization/userchecking')
-            .subscribe(next => { this.userstatus = true }, error => { this.userstatus = false});
-        return this.http.get('https://localhost:44316/store/getphones').subscribe(data => this.phones = data);
+        this.userstatus = this.userstatusservice.getuserstatus();
+        this.logger.log('user status got by component');
+        this.phoneservice.getphones().subscribe(data => this.phones = data);       
     }
     add(id) {
-        const params = new HttpParams().set('id', id.toString());
-        return this.http.get('https://localhost:44316/store/addtobasket', { params })
-            .subscribe(next => { window.location.reload(); }, error => { window.location.replace('https://localhost:44316/user'); });
+        this.phoneservice.add(id).subscribe(next => { this.phoneservice.getphones().subscribe(data => this.phones = data); });   
     }
     remove(id) {
-        const params = new HttpParams().set('id', id.toString());
-        return this.http.get('https://localhost:44316/store/removetobasket', { params })
-            .subscribe(next => { window.location.reload(); }, error => { window.location.replace('https://localhost:44316/user'); });
+        this.phoneservice.remove(id).subscribe(next => { this.phoneservice.getphones().subscribe(data => this.phones = data); });
     }
     logout() {
-        this.http.get('https://localhost:44316/authorization/logouting')
-            .subscribe(next => { window.location.replace('https://localhost:44316'); });
+        this.phoneservice.logout();
+    }
+    getstatus() {
+        this.phoneservice.getstatus();
     }
 }

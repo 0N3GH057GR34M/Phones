@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -15,6 +15,7 @@ import { UserComponent } from './user/user.component';
 import { DescriptionComponent } from './description/description.component';
 import { BasketComponent } from './basket/basket.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { AuthorizationInterceptorService } from './authorization-interceptor.service';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,11 @@ import { RegistrationComponent } from './registration/registration.component';
             { path: 'registration', component: RegistrationComponent },
         ])
     ],
-    providers: [HttpClient],
+    providers: [HttpClient, {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthorizationInterceptorService,
+        multi: true
+    }],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -22,7 +22,7 @@ namespace Test.Controllers
     {
       _data = context;
     }   
-    public List<PhonePreview> GetPhones()
+    public IActionResult GetPhones()
     {
       try
       {
@@ -51,11 +51,11 @@ namespace Test.Controllers
             }
           }
         }
-        return phoneswithmarks;
+        return Ok(phoneswithmarks);
       }
       catch
       {
-        return _data.Phones.Select(option => new PhonePreview(option.Id, option.Name)).ToList();
+        return StatusCode(206,_data.Phones.Select(option => new PhonePreview(option.Id, option.Name)).ToList());
       }
     }
     public List<BasketPhone> GetBasket()
@@ -78,7 +78,7 @@ namespace Test.Controllers
       }
       catch
       {
-        return BadRequest();
+        return Unauthorized();
       }
     }
     public IActionResult RemoveToBasket(string id)
