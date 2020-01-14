@@ -1,11 +1,9 @@
-<div style="border: 1px solid red">basket Component</div>
+<div><h1>Basket</h1></div>
 <div *ngFor="let phone of phones">
-  <div *ngIf="phone.isAdded">
-    <h3>
-      <a>
-        {{phone.name}}
-      </a>
-    </h3>
-    <button (click)="remove(phone.id)">Remove</button>
-  </div>
+  <h3>
+    <a>
+      {{phone.name}}
+    </a>
+  </h3>
+  <button (click)="remove(phone.id)">Remove</button>
 </div>

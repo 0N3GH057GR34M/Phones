@@ -21,7 +21,7 @@ namespace Test.Controllers
     public StoreController(DataContext context)
     {
       _data = context;
-    }   
+    }
     public IActionResult GetPhones()
     {
       try
@@ -55,13 +55,17 @@ namespace Test.Controllers
       }
       catch
       {
-        return StatusCode(206,_data.Phones.Select(option => new PhonePreview(option.Id, option.Name)).ToList());
+        return StatusCode(206, _data.Phones.Select(option => new PhonePreview(option.Id, option.Name)).ToList());
       }
     }
     public List<BasketPhone> GetBasket()
-    { 
-      var user = _data.Users.Where(option => option.Login == User.Identity.Name).FirstOrDefault();
-      return _data.Baskets.Where(option => option.UserId == user.Id).Select(option => new BasketPhone(option.Id, option.UserId)).ToList();
+    {
+      var user = _data.Users.Where(option =>
+      option.Login == User.Identity.Name).FirstOrDefault();
+      return _data.Baskets.Where(option =>
+      option.UserId == user.Id).Select(option =>
+      new BasketPhone(option.Id, _data.Phones.Where(phoneoption =>
+      phoneoption.Id == option.PhoneId).FirstOrDefault().Name, option.UserId)).ToList();
     }
     public List<PhoneUser> GetUsers()
     {
@@ -83,18 +87,13 @@ namespace Test.Controllers
     }
     public IActionResult RemoveToBasket(string id)
     {
-      try
-      {
-        var user = _data.Users.Where(option => option.Login == User.Identity.Name).FirstOrDefault();
-        var item = _data.Baskets.Where(option => option.PhoneId == int.Parse(id) && option.UserId == user.Id).FirstOrDefault();
-        _data.Baskets.Remove(item);
-        _data.SaveChanges();
-        return Ok();
-      }
-      catch
-      {
-        return BadRequest();
-      }
+      var user = _data.Users.Where(option => 
+      option.Login == User.Identity.Name).FirstOrDefault();
+      var item = _data.Baskets.Where(option => 
+      option.Id == int.Parse(id) && option.UserId == user.Id).FirstOrDefault();
+      _data.Baskets.Remove(item);
+      _data.SaveChanges();
+      return Ok();
     }
     public PhoneInfo GetPhoneDescription(int id)
     {

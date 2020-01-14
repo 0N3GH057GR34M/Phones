@@ -9,8 +9,12 @@ import { Observable } from 'rxjs';
 export class PhoneService {
     constructor(private http: HttpClient, private logger: LoggerService) { }
     getphones(): any {
-        this.logger.log('phones sended');
+        this.logger.log('phones got');
         return this.http.get('https://localhost:44316/store/getphones');
+    }
+    getbasket(): any {
+        this.logger.log('basket got');
+        return this.http.get('https://localhost:44316/store/getbasket')
     }
     add(id) {
         const params = new HttpParams().set('id', id.toString());
@@ -24,7 +28,7 @@ export class PhoneService {
     }
     logout() {
         this.http.get('https://localhost:44316/authorization/logouting')
-            .subscribe(next => { /*window.location.replace('https://localhost:44316');*/ this.logger.log('user loged out'); });
+            .subscribe(next => { window.location.replace('https://localhost:44316'); this.logger.log('user loged out'); });
     }
     getstatus() {
         this.logger.log('user status got');

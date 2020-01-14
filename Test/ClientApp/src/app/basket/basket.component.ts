@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { PhoneService } from '../phone.service';
 
 @Component({
     selector: 'app-basket',
@@ -7,14 +7,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
     styleUrls: ['./basket.component.css']
 })
 export class BasketComponent {
-    status;
     phones;
-    constructor(private http: HttpClient) { }
+    constructor(private phoneservice: PhoneService) { }
     ngOnInit() {
-        return this.http.get('https://localhost:44316/store/getphones').subscribe(data => this.phones = data);
+        this.phoneservice.getbasket().subscribe(data => this.phones = data);
     }
     remove(id) {
-        const params = new HttpParams().set('id', id.toString());
-        return this.http.get('https://localhost:44316/store/removetobasket', { params }).subscribe(next => { window.location.reload(); });
+        this.phoneservice.remove(id).subscribe(next => {
+            this.phoneservice.getbasket().subscribe(data => this.phones = data);
+        });
     }
 }

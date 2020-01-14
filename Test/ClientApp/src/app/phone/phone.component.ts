@@ -13,10 +13,9 @@ export class PhoneComponent implements OnInit{
     userstatus;
     phones;
     constructor(private phoneservice: PhoneService, private userstatusservice: UserAuthorizationStatusService, private logger: LoggerService) { }
-    ngOnInit() {
-        this.userstatus = this.userstatusservice.getuserstatus();
+    ngOnInit() {       
         this.logger.log('user status got by component');
-        this.phoneservice.getphones().subscribe(data => this.phones = data);       
+        this.phoneservice.getphones().subscribe(data => { this.phones = data; this.userstatus = this.userstatusservice.getuserstatus();});       
     }
     add(id) {
         this.phoneservice.add(id).subscribe(next => { this.phoneservice.getphones().subscribe(data => this.phones = data); });   
